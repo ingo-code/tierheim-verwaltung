@@ -10,7 +10,7 @@ from datetime import date
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
-from tierheim.api import hunde, medikation
+from tierheim.api import hunde, medikation, reports
 from tierheim.application.hund_anzeigen import HundNichtGefunden
 from tierheim.application.neuzugang_erfassen import ChipnummerBereitsVergeben
 from tierheim.application.ports import HundRepository
@@ -33,6 +33,7 @@ def create_app(
     app.state.heute = heute
     app.include_router(hunde.router)
     app.include_router(medikation.router)
+    app.include_router(reports.router)
     _fehler_uebersetzen(app)
     return app
 

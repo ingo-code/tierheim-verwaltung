@@ -10,7 +10,8 @@
 | 5 | Medikation und „heute fällig“ | List Comprehensions (auch verschachtelt), Datumslogik `timedelta`, `%`, Sortieren mit Tupel-Key | ✅ |
 | 6 | SQLite mit SQLAlchemy | ORM (`Mapped`, `relationship`), Sessions, `merge`, `tmp_path`, `monkeypatch`, App-Fabrik | ✅ |
 | 7 | Next.js-Frontend | fetch gegen die API, CORS | ⬜ |
-| 8 | pandas-Report/CSV-Import | DataFrames | ⬜ |
+| 8 | pandas-Report/CSV-Import | DataFrames, `read_csv(dtype=str)`, `value_counts`, `nlargest`, `UploadFile`, Kodierungen | ✅ |
+| 9 | README + GitHub | Projekt präsentieren | ⬜ |
 
 ## Vorgehen mit dem Agenten (je Feature)
 1. **Fachlich beschreiben:** „Ich will X, weil Y.“ Das Ergebnis kommt in `docs/`, wenn es neu ist.

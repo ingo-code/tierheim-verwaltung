@@ -21,4 +21,15 @@
 5. Medikation hinzufügen, „heute fällig“ abfragen
 6. Persistenz mit SQLite/SQLAlchemy
 7. Next.js-Frontend: Bestandsliste, Neuzugangsformular, Medikamenten-Tagesliste
-8. Bonus für ibb: CSV-Import und Report mit pandas
+8. CSV-Import und Report mit pandas
+
+## CSV-Format (Import und Export)
+Trennzeichen `;`, Kopfzeile `Name;Geschlecht;Herkunft;Aufnahmedatum;Rasse;Chipnummer` (Export zusätzlich `Status`).
+Datum `TT.MM.JJJJ`, Geschlecht `Rüde`/`Hündin`, Herkunft `Fundtier`/`Abgabe`/`Beschlagnahme`.
+Kodierung UTF-8 (mit/ohne BOM) oder Windows-1252. Fehlerhafte Zeilen werden mit Zeilennummer gemeldet, der Rest importiert.
+Beispiel: `beispieldaten/bestand.csv` (7 gültige, 2 absichtlich fehlerhafte Zeilen).
+Offen: Der Import übernimmt die Spalte `Status` noch nicht (importierte Hunde sind `aufgenommen`).
+
+## Bestandsreport
+Im Heim = alle außer `vermittelt`. Kennzahlen: Anzahl im Heim, Verteilung nach Status (alle) und Herkunft (im Heim),
+durchschnittliche Verweildauer in Tagen, die 3 längsten Aufenthalte, Hunde ohne Chip, heute fällige Gaben.

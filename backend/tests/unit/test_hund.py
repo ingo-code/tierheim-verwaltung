@@ -2,6 +2,7 @@ from datetime import date
 
 import pytest
 
+from tierheim.domain.chipnummer import Chipnummer
 from tierheim.domain.hund import Geschlecht, Herkunft, Hund, Status, UngueltigerHund
 
 
@@ -33,3 +34,15 @@ def test_jeder_hund_bekommt_eine_eigene_id():
 def test_hund_ohne_namen_wird_abgelehnt(name):
     with pytest.raises(UngueltigerHund):
         neuer_hund(name=name)
+
+
+def test_hund_ohne_chip_bekommt_chip_nachgetragen():
+    hund = neuer_hund()
+    hund.chip_nachtragen(Chipnummer("276098100123456"))
+    assert hund.chipnummer == Chipnummer("276098100123456")
+
+
+def test_vorhandener_chip_wird_nicht_ueberschrieben():
+    hund = neuer_hund(chipnummer=Chipnummer("276098100123456"))
+    with pytest.raises(UngueltigerHund):
+        hund.chip_nachtragen(Chipnummer("276098100999999"))

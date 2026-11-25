@@ -47,3 +47,11 @@ class Hund:
         self.name = self.name.strip()
         if not self.name:
             raise UngueltigerHund("Ein Hund braucht einen Namen.")
+
+    def chip_nachtragen(self, chipnummer: Chipnummer) -> None:
+        """Für Hunde, die ohne Chip ankommen. Ein vorhandener Chip bleibt unangetastet."""
+        if self.chipnummer is not None:
+            raise UngueltigerHund(
+                f"{self.name} hat bereits die Chipnummer {self.chipnummer.wert}."
+            )
+        self.chipnummer = chipnummer

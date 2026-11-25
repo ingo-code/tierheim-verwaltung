@@ -58,6 +58,10 @@ class Hund:
             )
         self.chipnummer = chipnummer
 
+    @property
+    def ist_im_heim(self) -> bool:
+        return self.status != Status.VERMITTELT
+
     def medikation_hinzufuegen(self, medikation: Medikation) -> None:
         self.medikationen.append(medikation)
 

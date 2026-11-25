@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 LAENGE = 15
+UNGUELTIGER_CODE = "000"
 
 
 class UngueltigeChipnummer(ValueError):
@@ -20,3 +21,5 @@ class Chipnummer:
             )
         if not self.wert.isdigit():
             raise UngueltigeChipnummer("Chipnummer darf nur Ziffern enthalten.")
+        if self.wert[:3] == UNGUELTIGER_CODE:
+            raise UngueltigeChipnummer("Länder-/Herstellercode 000 ist ungültig.")

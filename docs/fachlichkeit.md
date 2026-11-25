@@ -7,8 +7,10 @@
   Ländercode 001–899 (Deutschland: 276; Auslandshunde z. B. Rumänien 642) oder ein Herstellercode (900–999);
   000 ist ungültig. Eingaben mit Leerzeichen („276 098 100 123 456“) werden bereinigt. Ein Hund kann bei der Aufnahme noch ohne Chip sein.
   Eine Chipnummer darf im Bestand nur **einmal** vorkommen.
-- **Medikation**: Medikament, Dosis, Häufigkeit, Start- und (optional) Enddatum. Wichtig ist die Frage: Welche Hunde
-  brauchen heute welches Medikament?
+- **Medikation**: Medikament, Dosis, Startdatum, optionales Enddatum (inklusive) und Intervall in Tagen
+  (1 = täglich, 7 = wöchentlich). Fällig ist sie an jedem Tag im Zeitraum, an dem (Tag − Start) durch das Intervall
+  teilbar ist. **Tagesliste**: alle heute fälligen Gaben der Hunde, die noch im Heim sind (nicht `vermittelt`),
+  sortiert nach Hund und Medikament.
 - **Status**: `aufgenommen` → `vermittelbar` → `reserviert` → `vermittelt` (oder `verstorben`, `zurück an Halter`).
 
 ## Erste Features (in dieser Reihenfolge)

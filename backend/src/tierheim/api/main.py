@@ -9,12 +9,13 @@ from datetime import date
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
-from tierheim.api import hunde
+from tierheim.api import hunde, medikation
 from tierheim.application.hund_anzeigen import HundNichtGefunden
 from tierheim.application.neuzugang_erfassen import ChipnummerBereitsVergeben
 from tierheim.application.ports import HundRepository
 from tierheim.domain.chipnummer import UngueltigeChipnummer
 from tierheim.domain.hund import UngueltigerHund
+from tierheim.domain.medikation import UngueltigeMedikation
 from tierheim.infrastructure.in_memory_hund_repository import InMemoryHundRepository
 
 
@@ -30,6 +31,7 @@ def create_app(
     app.state.repository = repository if repository is not None else InMemoryHundRepository()
     app.state.heute = heute
     app.include_router(hunde.router)
+    app.include_router(medikation.router)
     _fehler_uebersetzen(app)
     return app
 
@@ -39,6 +41,7 @@ def _fehler_uebersetzen(app: FastAPI) -> None:
 
     @app.exception_handler(UngueltigeChipnummer)
     @app.exception_handler(UngueltigerHund)
+    @app.exception_handler(UngueltigeMedikation)
     def fachregel_verletzt(_: Request, fehler: ValueError) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,

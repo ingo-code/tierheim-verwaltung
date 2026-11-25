@@ -5,9 +5,15 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request, status
 
-from tierheim.api.schemas import HundResponse, NeuzugangRequest
+from tierheim.api.schemas import (
+    HundResponse,
+    MedikationRequest,
+    MedikationResponse,
+    NeuzugangRequest,
+)
 from tierheim.application.bestand_auflisten import BestandAuflisten
 from tierheim.application.hund_anzeigen import HundAnzeigen
+from tierheim.application.medikation_hinzufuegen import MedikationHinzufuegen
 from tierheim.application.neuzugang_erfassen import NeuzugangErfassen
 
 router = APIRouter(prefix="/hunde", tags=["Hunde"])
@@ -26,6 +32,10 @@ def _bestand_auflisten(request: Request) -> BestandAuflisten:
 
 def _hund_anzeigen(request: Request) -> HundAnzeigen:
     return HundAnzeigen(request.app.state.repository)
+
+
+def _medikation_hinzufuegen(request: Request) -> MedikationHinzufuegen:
+    return MedikationHinzufuegen(request.app.state.repository)
 
 
 # --- Endpunkte ---------------------------------------------------------------
@@ -52,3 +62,16 @@ def hund_anzeigen(
     use_case: Annotated[HundAnzeigen, Depends(_hund_anzeigen)],
 ) -> HundResponse:
     return HundResponse.aus_hund(use_case.ausfuehren(hund_id))
+
+
+@router.post(
+    "/{hund_id}/medikationen",
+    status_code=status.HTTP_201_CREATED,
+    summary="Medikament verordnen",
+)
+def medikation_verordnen(
+    hund_id: UUID,
+    eingabe: MedikationRequest,
+    use_case: Annotated[MedikationHinzufuegen, Depends(_medikation_hinzufuegen)],
+) -> MedikationResponse:
+    return MedikationResponse.aus_medikation(use_case.ausfuehren(hund_id, eingabe.als_daten()))

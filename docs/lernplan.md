@@ -3,7 +3,7 @@
 | # | Lektion | Python-Thema | Status |
 |---|---|---|---|
 | 0 | Setup, leerer Test, erster Commit | uv, pytest, Pakete/Module | ✅ |
-| 1 | Wertobjekt `Chipnummer` | Klassen, `@dataclass(frozen=True)`, Exceptions, `pytest.raises` | ⬜ |
+| 1 | Wertobjekt `Chipnummer` | Klassen, `@dataclass(frozen=True)`, Exceptions, `pytest.raises`, `parametrize`, `@classmethod`, `@property` | ✅ |
 | 2 | Entität `Hund`, Use Case `NeuzugangErfassen` | Type Hints, `Enum`, `datetime.date`, `Protocol` | ⬜ |
 | 3 | In-Memory-Repository, doppelte Chips | dict, Dependency Injection von Hand | ⬜ |
 | 4 | FastAPI: POST/GET | Pydantic-Modelle (≈ Zod), `TestClient` | ⬜ |

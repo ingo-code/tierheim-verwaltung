@@ -33,3 +33,12 @@ def test_laender_und_herstellercodes_werden_akzeptiert(nummer):
 def test_chipnummer_mit_code_000_wird_abgelehnt():
     with pytest.raises(UngueltigeChipnummer):
         Chipnummer("000123456789012")
+
+
+def test_eingabe_mit_leerzeichen_wird_bereinigt():
+    chip = Chipnummer.aus_eingabe("  276 098 100 123 456 ")
+    assert chip.wert == "276098100123456"
+
+
+def test_chipnummern_mit_gleichem_wert_sind_gleich():
+    assert Chipnummer("276098100123456") == Chipnummer.aus_eingabe("276 098 100 123 456")

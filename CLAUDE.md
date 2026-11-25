@@ -30,7 +30,7 @@ Abhängigkeiten zeigen nur nach innen: `api → application → domain`, `infras
 - `domain/`: Entitäten und Regeln (Hund, Chipnummer, Medikation). **Reines Python**, ohne FastAPI und ohne Datenbank.
 - `application/`: Use Cases (z. B. `NeuzugangErfassen`) und Schnittstellen (Ports) wie `HundRepository` als `Protocol`.
 - `infrastructure/`: Umsetzungen der Ports (In-Memory, SQLite mit SQLAlchemy). Tabellenklassen getrennt von der Domain.
-  Neue Repository-Umsetzungen müssen die Vertragstests in `tests/unit/test_hund_repository.py` bestehen.
+  Neue Repository-Umsetzungen müssen die Vertragstests in `tests/integration/test_hund_repository.py` bestehen.
 - `server.py`: Produktions-Startpunkt (echte DB, echtes Datum). Tests nutzen `create_app(...)` direkt.
 - `api/`: FastAPI-Router, Request/Response-Schemas (Pydantic) und die Verdrahtung (Dependency Injection).
 - Unit-Tests (`tests/unit/`) testen domain und application ohne I/O. Integrationstests (`tests/integration/`) testen API und Datenbank.

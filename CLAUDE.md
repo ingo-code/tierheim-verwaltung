@@ -13,7 +13,8 @@ selbst tippen, wenn er das möchte.
 ## Befehle
 - Tests: `cd backend && uv run pytest`
 - Abhängigkeit hinzufügen: `uv add <paket>` bzw. `uv add --dev <paket>`
-- API starten (sobald vorhanden): `cd backend && uv run fastapi dev src/tierheim/api/main.py`
+- API starten (SQLite, Auto-Reload): `cd backend && uv run uvicorn tierheim.server:erzeuge_app --factory --reload`
+  → http://127.0.0.1:8000/docs · Datenbank: `TIERHEIM_DB_URL` (Standard `sqlite:///tierheim.db`)
 
 ## Arbeitsweise: TDD, streng
 1. **Rot:** Zuerst ein Test, der das gewünschte Verhalten beschreibt. Ausführen und zusehen, wie er fehlschlägt.
@@ -28,7 +29,9 @@ selbst tippen, wenn er das möchte.
 Abhängigkeiten zeigen nur nach innen: `api → application → domain`, `infrastructure → application → domain`.
 - `domain/`: Entitäten und Regeln (Hund, Chipnummer, Medikation). **Reines Python**, ohne FastAPI und ohne Datenbank.
 - `application/`: Use Cases (z. B. `NeuzugangErfassen`) und Schnittstellen (Ports) wie `HundRepository` als `Protocol`.
-- `infrastructure/`: Umsetzungen der Ports (In-Memory, später SQLAlchemy/SQLite).
+- `infrastructure/`: Umsetzungen der Ports (In-Memory, SQLite mit SQLAlchemy). Tabellenklassen getrennt von der Domain.
+  Neue Repository-Umsetzungen müssen die Vertragstests in `tests/unit/test_hund_repository.py` bestehen.
+- `server.py`: Produktions-Startpunkt (echte DB, echtes Datum). Tests nutzen `create_app(...)` direkt.
 - `api/`: FastAPI-Router, Request/Response-Schemas (Pydantic) und die Verdrahtung (Dependency Injection).
 - Unit-Tests (`tests/unit/`) testen domain und application ohne I/O. Integrationstests (`tests/integration/`) testen API und Datenbank.
 

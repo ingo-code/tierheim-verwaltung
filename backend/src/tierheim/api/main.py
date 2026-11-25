@@ -1,6 +1,7 @@
-"""Einstiegspunkt der API – hier wird alles verdrahtet (Composition Root).
+"""App-Fabrik der API – hier wird alles verdrahtet (Composition Root).
 
-Start: `uv run fastapi dev src/tierheim/api/main.py` → http://127.0.0.1:8000/docs
+Für Tests: `create_app(repository=..., heute=...)`.
+Für den echten Betrieb: siehe `tierheim/server.py` (SQLite).
 """
 
 from collections.abc import Callable
@@ -65,5 +66,3 @@ def _fehler_uebersetzen(app: FastAPI) -> None:
             content={"detail": str(fehler)},
         )
 
-
-app = create_app()

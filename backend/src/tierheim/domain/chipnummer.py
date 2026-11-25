@@ -18,3 +18,5 @@ class Chipnummer:
             raise UngueltigeChipnummer(
                 f"Chipnummer muss {LAENGE} Ziffern haben, hat aber {len(self.wert)}."
             )
+        if not self.wert.isdigit():
+            raise UngueltigeChipnummer("Chipnummer darf nur Ziffern enthalten.")

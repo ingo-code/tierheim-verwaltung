@@ -11,3 +11,8 @@ def test_gueltige_deutsche_chipnummer_wird_akzeptiert():
 def test_chipnummer_mit_14_ziffern_wird_abgelehnt():
     with pytest.raises(UngueltigeChipnummer):
         Chipnummer("27609810012345")
+
+
+def test_chipnummer_mit_buchstaben_wird_abgelehnt():
+    with pytest.raises(UngueltigeChipnummer):
+        Chipnummer("27609810012345A")

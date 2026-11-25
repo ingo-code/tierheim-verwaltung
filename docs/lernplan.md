@@ -6,7 +6,7 @@
 | 1 | Wertobjekt `Chipnummer` | Klassen, `@dataclass(frozen=True)`, Exceptions, `pytest.raises`, `parametrize`, `@classmethod`, `@property` | ✅ |
 | 2 | Entität `Hund`, Use Case `NeuzugangErfassen` | Type Hints, `Enum`, `datetime.date`, `Protocol`, Fixtures, Test-Doubles | ✅ |
 | 3 | In-Memory-Repository, doppelte Chips | dict, Dependency Injection von Hand, Vertragstests, `next()` mit Generator | ✅ |
-| 4 | FastAPI: POST/GET | Pydantic-Modelle (≈ Zod), `TestClient` | ⬜ |
+| 4 | FastAPI: POST/GET | Pydantic-Modelle (≈ Zod), `TestClient`, `Depends`, Exception-Handler | ✅ |
 | 5 | Medikation und „heute fällig“ | List Comprehensions, Datumslogik | ⬜ |
 | 6 | SQLite mit SQLAlchemy | ORM, Sessions, Fixtures | ⬜ |
 | 7 | Next.js-Frontend | fetch gegen die API, CORS | ⬜ |

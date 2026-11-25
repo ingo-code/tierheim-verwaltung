@@ -6,6 +6,7 @@ from enum import StrEnum
 from uuid import UUID, uuid4
 
 from tierheim.domain.chipnummer import Chipnummer
+from tierheim.domain.medikation import Medikation
 
 
 class UngueltigerHund(ValueError):
@@ -41,6 +42,7 @@ class Hund:
     rasse: str | None = None
     chipnummer: Chipnummer | None = None
     status: Status = Status.AUFGENOMMEN
+    medikationen: list[Medikation] = field(default_factory=list)
     id: UUID = field(default_factory=uuid4)
 
     def __post_init__(self) -> None:
@@ -55,3 +57,9 @@ class Hund:
                 f"{self.name} hat bereits die Chipnummer {self.chipnummer.wert}."
             )
         self.chipnummer = chipnummer
+
+    def medikation_hinzufuegen(self, medikation: Medikation) -> None:
+        self.medikationen.append(medikation)
+
+    def faellige_medikationen(self, tag: date) -> list[Medikation]:
+        return [m for m in self.medikationen if m.ist_faellig_am(tag)]

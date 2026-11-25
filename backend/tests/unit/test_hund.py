@@ -4,6 +4,7 @@ import pytest
 
 from tierheim.domain.chipnummer import Chipnummer
 from tierheim.domain.hund import Geschlecht, Herkunft, Hund, Status, UngueltigerHund
+from tierheim.domain.medikation import Medikation
 
 
 def neuer_hund(**abweichungen) -> Hund:
@@ -46,3 +47,31 @@ def test_vorhandener_chip_wird_nicht_ueberschrieben():
     hund = neuer_hund(chipnummer=Chipnummer("276098100123456"))
     with pytest.raises(UngueltigerHund):
         hund.chip_nachtragen(Chipnummer("276098100999999"))
+
+
+def test_neuer_hund_hat_keine_medikation():
+    assert neuer_hund().medikationen == []
+
+
+def test_medikation_wird_dem_hund_hinzugefuegt():
+    hund = neuer_hund()
+    metacam = Medikation(medikament="Metacam", dosis="1,5 ml", startdatum=date(2026, 11, 20))
+
+    hund.medikation_hinzufuegen(metacam)
+
+    assert hund.medikationen == [metacam]
+
+
+def test_faellige_medikationen_am_tag():
+    hund = neuer_hund()
+    taeglich = Medikation(medikament="Metacam", dosis="1,5 ml", startdatum=date(2026, 11, 20))
+    beendet = Medikation(
+        medikament="Antibiotikum",
+        dosis="1 Tablette",
+        startdatum=date(2026, 11, 1),
+        enddatum=date(2026, 11, 10),
+    )
+    hund.medikation_hinzufuegen(taeglich)
+    hund.medikation_hinzufuegen(beendet)
+
+    assert hund.faellige_medikationen(date(2026, 11, 25)) == [taeglich]

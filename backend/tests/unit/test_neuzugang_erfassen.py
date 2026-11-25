@@ -2,21 +2,16 @@ from datetime import date
 
 import pytest
 
-from tierheim.application.neuzugang_erfassen import NeuzugangDaten, NeuzugangErfassen
+from tierheim.application.neuzugang_erfassen import (
+    ChipnummerBereitsVergeben,
+    NeuzugangDaten,
+    NeuzugangErfassen,
+)
 from tierheim.domain.chipnummer import Chipnummer, UngueltigeChipnummer
-from tierheim.domain.hund import Geschlecht, Herkunft, Hund, Status, UngueltigerHund
+from tierheim.domain.hund import Geschlecht, Herkunft, Status, UngueltigerHund
+from tierheim.infrastructure.in_memory_hund_repository import InMemoryHundRepository
 
 HEUTE = date(2026, 11, 25)
-
-
-class FakeHundRepository:
-    """Test-Double: erfüllt das Protocol HundRepository, speichert nur in einer Liste."""
-
-    def __init__(self) -> None:
-        self.gespeichert: list[Hund] = []
-
-    def speichern(self, hund: Hund) -> None:
-        self.gespeichert.append(hund)
 
 
 def daten(**abweichungen) -> NeuzugangDaten:
@@ -31,8 +26,8 @@ def daten(**abweichungen) -> NeuzugangDaten:
 
 
 @pytest.fixture
-def repository() -> FakeHundRepository:
-    return FakeHundRepository()
+def repository() -> InMemoryHundRepository:
+    return InMemoryHundRepository()
 
 
 @pytest.fixture
@@ -43,7 +38,7 @@ def neuzugang_erfassen(repository) -> NeuzugangErfassen:
 def test_neuzugang_wird_gespeichert(neuzugang_erfassen, repository):
     hund = neuzugang_erfassen.ausfuehren(daten())
 
-    assert repository.gespeichert == [hund]
+    assert repository.alle() == [hund]
     assert hund.name == "Luna"
     assert hund.status == Status.AUFGENOMMEN
 
@@ -58,11 +53,28 @@ def test_ungueltige_chipnummer_wird_nicht_gespeichert(neuzugang_erfassen, reposi
     with pytest.raises(UngueltigeChipnummer):
         neuzugang_erfassen.ausfuehren(daten(chipnummer="123"))
 
-    assert repository.gespeichert == []
+    assert repository.alle() == []
 
 
 def test_aufnahmedatum_in_der_zukunft_wird_abgelehnt(neuzugang_erfassen, repository):
     with pytest.raises(UngueltigerHund):
         neuzugang_erfassen.ausfuehren(daten(aufnahmedatum=date(2026, 11, 26)))
 
-    assert repository.gespeichert == []
+    assert repository.alle() == []
+
+
+def test_doppelte_chipnummer_wird_abgelehnt(neuzugang_erfassen, repository):
+    luna = neuzugang_erfassen.ausfuehren(daten(chipnummer="276098100123456"))
+
+    with pytest.raises(ChipnummerBereitsVergeben) as fehler:
+        neuzugang_erfassen.ausfuehren(daten(name="Rex", chipnummer="276 098 100 123 456"))
+
+    assert "Luna" in str(fehler.value)
+    assert repository.alle() == [luna]
+
+
+def test_mehrere_hunde_ohne_chip_sind_erlaubt(neuzugang_erfassen, repository):
+    neuzugang_erfassen.ausfuehren(daten(name="Luna"))
+    neuzugang_erfassen.ausfuehren(daten(name="Rex"))
+
+    assert len(repository.alle()) == 2
